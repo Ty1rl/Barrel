@@ -1,0 +1,170 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://Shaders/wobble.shader" type="Shader" id=1]
+[ext_resource path="res://Barrel/Barrel.gd" type="Script" id=2]
+[ext_resource path="res://Barrel/Ring.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://Barrel/Barrel.mesh" type="ArrayMesh" id=4]
+[ext_resource path="res://Sounds/cannon.wav" type="AudioStream" id=5]
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0.494118, 0.360784, 0.188235, 1 )
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0.341176, 0.341176, 0.341176, 1 )
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="CylinderMesh" id=16]
+top_radius = 0.1
+bottom_radius = 0.1
+
+[sub_resource type="ShaderMaterial" id=17]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0.341176, 0.341176, 0.341176, 1 )
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="PlaneMesh" id=18]
+size = Vector2( 1, 1 )
+subdivide_width = 1
+subdivide_depth = 1
+
+[sub_resource type="ShaderMaterial" id=19]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0.658824, 0.235294, 0.235294, 1 )
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="CylinderMesh" id=5]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 1.0
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0, 0, 0, 1 )
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="SphereMesh" id=7]
+radius = 0.5
+height = 1.0
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = ExtResource( 1 )
+shader_param/color = null
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="CylinderMesh" id=9]
+top_radius = 0.2
+bottom_radius = 0.4
+height = 1.0
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = ExtResource( 1 )
+shader_param/color = null
+shader_param/amount = 0.02
+shader_param/speed = 3.0
+shader_param/frequency = 2.87
+
+[sub_resource type="SpatialMaterial" id=20]
+flags_unshaded = true
+
+[sub_resource type="SphereMesh" id=21]
+material = SubResource( 20 )
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape" id=4]
+radius = 5.0
+
+[sub_resource type="BoxShape" id=15]
+margin = 0.1
+extents = Vector3( 1, 2, 1 )
+
+[node name="Barrel" type="Spatial" groups=["Barrel"]]
+script = ExtResource( 2 )
+
+[node name="Barrel" type="MeshInstance" parent="."]
+mesh = ExtResource( 4 )
+material/0 = SubResource( 10 )
+
+[node name="Ring" type="MeshInstance" parent="Barrel"]
+mesh = ExtResource( 3 )
+material/0 = SubResource( 11 )
+
+[node name="Pole" type="MeshInstance" parent="Barrel"]
+transform = Transform( 0.920723, -0.385265, -0.0619715, 0.390217, 0.909038, 0.146223, 0, -0.158813, 0.987309, -1.23214, 1.38871, -0.37584 )
+mesh = SubResource( 16 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 17 )
+
+[node name="Flag" type="MeshInstance" parent="Barrel/Pole"]
+transform = Transform( -0.0204803, 0.0845104, 0.996212, 0.999695, 0.0155264, 0.0192348, -0.0138419, 0.996302, -0.0848026, -0.51072, 0.446266, 0.0717841 )
+mesh = SubResource( 18 )
+material/0 = SubResource( 19 )
+
+[node name="Neck" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10521, 0 )
+mesh = SubResource( 5 )
+material/0 = SubResource( 12 )
+
+[node name="Top" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95037, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Top"]
+mesh = SubResource( 7 )
+material/0 = SubResource( 13 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="Top"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.693 )
+mesh = SubResource( 9 )
+material/0 = SubResource( 14 )
+
+[node name="Offset" type="Position3D" parent="Top"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2 )
+
+[node name="CPUParticles" type="CPUParticles" parent="Top/Offset"]
+emitting = false
+lifetime = 0.1
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource( 21 )
+direction = Vector3( 0, 0, -1 )
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 25.0
+initial_velocity_random = 1.0
+
+[node name="Area" type="Area" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 4 )
+
+[node name="StaticBody" type="StaticBody" parent="." groups=["Tower"]]
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0 )
+shape = SubResource( 15 )
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -6.0
+
+[connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
+[connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]
